@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Docker image
+        run: docker build -t devops-app .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to Local VMware VM
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.192.168.28.159 }}
+          username: ${{ secrets.rakesh }}
+          key: ${{ secrets.b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABBwpWNVxm
+1uW+TkljeIYEuYAAAAEAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAICL5fjzw2yq0Bb1x
+5AAXf/i3B3JNIJl86RcJQNiER5XuAAAAoCa2bTJ2u4UQJVQacvFiEvJPTm6GYK3eErRKbj
+0VR5qmPJLqhABSE73HS6wGkN4tIiagP2hJeHau5jzv324KC0Q/WkisaFKQUPM/x6QpGRgi
+8EX+GE3ZMwO8w91YNIxf0H5a5+7c1CY5gkg/mkCsyJ6O8q+rPc5G8jE2XIe0bhsLgHSYz0
+3iS6cPxQnJ9zfPNdB7zZ/szAlIlrAEQtHDVFE= }}
+          port: 22
+          script: |
+            docker stop devops-app || true
+            docker rm devops-app || true
+            docker pull devops-app:latest
+            docker run -d -p 3000:3000 --name devops-app devops-app
+
