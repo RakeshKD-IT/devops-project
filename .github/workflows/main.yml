@@ -30,14 +30,9 @@ jobs:
       - name: Deploy to Local VMware VM
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.192.168.28.159 }}
-          username: ${{ secrets.rakesh }}
-          key: ${{ secrets.b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABBwpWNVxm
-1uW+TkljeIYEuYAAAAEAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAICL5fjzw2yq0Bb1x
-5AAXf/i3B3JNIJl86RcJQNiER5XuAAAAoCa2bTJ2u4UQJVQacvFiEvJPTm6GYK3eErRKbj
-0VR5qmPJLqhABSE73HS6wGkN4tIiagP2hJeHau5jzv324KC0Q/WkisaFKQUPM/x6QpGRgi
-8EX+GE3ZMwO8w91YNIxf0H5a5+7c1CY5gkg/mkCsyJ6O8q+rPc5G8jE2XIe0bhsLgHSYz0
-3iS6cPxQnJ9zfPNdB7zZ/szAlIlrAEQtHDVFE= }}
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEYo }}
           port: 22
           script: |
             docker stop devops-app || true
